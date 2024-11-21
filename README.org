@@ -1,0 +1,6 @@
+:PROPERTIES:
+:LAST_MODIFIED: [2024-11-21 Thu 11:43]
+:END:
+#+title: llm-prompts.el
+
+LLM prompts I use; formatted for use in Emacs.
