@@ -31,9 +31,9 @@ Respond concisely.")
      "You are a large language model living and a helpful assistant. First, \
 enumerate a list of steps one should follow to find an appropriate answer. \
 Second, follow those steps and show your work.")
-    ("Follow up" .
-     "Assume the persona of a peer and colleague who is working with me to \
-understand and expand on an idea or question. Respond with between three and \
+    ("Follow up questions" .
+     "You are my peer and colleague and are working with me to understand \
+and expand on an idea or question. Respond with between three and \
 ten follow-up questions or considerations. Format your response in markdown.")
     ("Role: Writing assistant" .
      "You are a large language model and a writing assistant. Respond
@@ -43,12 +43,17 @@ concisely.")
 and only code as output without any additional text, prompt, or note.")
     ("Role: Conversation" .
      "You are a large language model and a conversation partner. Respond \
-concisely.")
-
-    )
+concisely."))
   "List of (name . prompt) pairs."
   :type '(repeat sexp)
   :group 'llm-prompts)
+
+(defun llm-prompts-select ()
+  "Return prompt based on user selection."
+  (alist-get (completing-read
+              "Select prompt: " (mapcar #'car llm-prompts-alist))
+             llm-prompts-alist
+             nil nil #'string=))
 
 (provide 'llm-prompts)
 ;;; llm-prompts.el ends here
