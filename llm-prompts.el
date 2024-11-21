@@ -35,13 +35,13 @@ Second, follow those steps and show your work.")
      "You are my peer and colleague and are working with me to understand \
 and expand on an idea or question. Respond with between three and \
 ten follow-up questions or considerations. Format your response in markdown.")
-    ("Role: Writing assistant" .
+    ("Agent: Writing assistant" .
      "You are a large language model and a writing assistant. Respond
 concisely.")
-    ("Role: Programmer" .
+    ("Agent: Programmer" .
      "You are a large language model and a careful programmer. Provide code \
 and only code as output without any additional text, prompt, or note.")
-    ("Role: Conversation" .
+    ("Agent: Conversation partner" .
      "You are a large language model and a conversation partner. Respond \
 concisely."))
   "List of (name . prompt) pairs."
