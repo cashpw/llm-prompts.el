@@ -16,6 +16,11 @@
 ;;
 ;;  LLM prompts that I use.
 ;;
+;;  - `llm-prompts-prompt-default'
+;;  - `llm-prompts-prompt-follow-up-questions'
+;;  - `llm-prompts-prompt-agent'
+;;  - `llm-prompts-prompt-solo-performance-prompt'
+;;
 ;;; Code:
 
 (defgroup llm-prompts nil
@@ -23,13 +28,16 @@
   :tag "LLM prompts"
   :group 'org)
 
-(defcustom llm-prompts-alist
-  '(("Default" .
-     "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
-    ("Chain of thought" .
-     "You are a large language model living and a helpful assistant. First, enumerate a list of steps one should follow to find an appropriate answer. Second, follow those steps and show your work.")
-    ("Follow up questions" .
-     "When faced with a prompt, begin by identifying the participants who will contribute to asking follow-up questions. Then, each participant should ask between three and ten follow-up questions.
+(defvar llm-prompts-prompt--default
+  "You are a large language model living in Emacs and a helpful assistant. Respond concisely."
+  "Default prompt.")
+
+(defun llm-prompts-prompt-default ()
+  "Return formatted prompt."
+  llm-prompts-prompt--default)
+
+(defvar llm-prompts-prompt--follow-up-questions
+  "When faced with a prompt, begin by identifying the participants who will contribute to asking follow-up questions. Then, each participant should ask between three and ten follow-up questions.
 
 Here are some examples:
 
@@ -142,18 +150,50 @@ Caterer:
 ---
 
 Prompt: "
-     ;; "When faced with a task, begin by identifying the participants who will contribute to solving the task. Then, allow each "
-     ;; "You are my peer and colleague and are working with me to understand and expand on an idea or question. Respond with between three and ten follow-up questions or considerations. Format your response in markdown."
-     )
-    ("Agent: Writing assistant" .
-     "You are a large language model and a writing assistant. Respond concisely.")
-    ("Agent: Programmer" .
-     "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt, or note.")
-    ("Agent: Conversation partner" .
-     "You are a large language model and a conversation partner. Respond concisely.")
-    ;; https://arxiv.org/abs/2307.05300v4
-    ("Solo performance prompting" .
-     "When faced with a task, begin by identifying the participants who will contribute to solving the task. Then, initiate a multi-round collaboration process until a final solution is reached. The participants will give critical comments and detailed suggestions whenever necessary.
+  "Prompt LLM to ask follow up questions; uses Solo Performance Prompting.")
+
+(defun llm-prompts-prompt-follow-up-questions ()
+  "Return formatted prompt."
+  llm-prompts-prompt--follow-up-questions)
+
+(defvar llm-prompts-prompt-fragment--chain-of-thought
+  "First, enumerate a list of steps one should follow to find an appropriate response. Second, follow those steps and show your work."
+  "Prompt fragment to cue Chain of Thought.")
+
+(defun llm-prompts-prompt-append-chain-of-thought (prompt)
+  "Append Chain of Thought fragment to PROMPT."
+  (format
+   "%s
+
+%s"
+   prompt llm-prompts-prompt-fragment--chain-of-thought))
+
+(defvar llm-prompts-prompt-fragment--tree-of-thought
+  "Please structure your response in these four stages:
+
+1. Brainstorming: Provide multiple diverse responses.
+2. Evaluation: Assess the pros and cons of each responses.
+3. Expansion: Delve deeper into each response, outlining implementation strategies, potential scenarios, and ways to overcome challenges.
+4. Decision: Rank the responses based on the evaluations, providing justifications for the rankings."
+  "Prompt fragment to cue Tree of Thought.")
+
+(defun llm-prompts-prompt-append-tree-of-thought (prompt)
+  "Append Tree of Thought fragment to PROMPT."
+  (format
+   "%s
+
+%s"
+   prompt llm-prompts-prompt-fragment--tree-of-thought))
+
+(defun llm-prompts-prompt-agent (agent)
+  "Return formatted prompt for large language model to act as AGENT."
+  (format "You are %s."
+          (if (string-empty-p agent)
+              "an expert and helpful assistant"
+            agent)))
+
+(defvar llm-prompts-prompt--solo-performance-prompt
+  "When faced with a task, begin by identifying the participants who will contribute to solving the task. Then, initiate a multi-round collaboration process until a final solution is reached. The participants will give critical comments and detailed suggestions whenever necessary.
 
 Here are some examples:
 ---
@@ -242,17 +282,21 @@ Transforming our future, we await.
 ---
 Now, identify the participants and collaboratively solve the following task step by step.
 
-Task: "))
-  "List of (name . prompt) pairs."
-  :type '(repeat sexp)
-  :group 'llm-prompts)
+Task: "
+  "Prompt using Solo Performance Prompting (https://arxiv.org/abs/2307.05300v4) technique.")
 
-(defun llm-prompts-select ()
-  "Return prompt based on user selection."
-  (alist-get (completing-read
-              "Select prompt: " (mapcar #'car llm-prompts-alist))
-             llm-prompts-alist
-             nil nil #'string=))
+(defun llm-prompts-prompt-solo-performance-prompt ()
+  "Return prompt."
+  llm-prompts-prompt--solo-performance-prompt)
+
+(defvar llm-prompts-prompt-tree-of-thought
+  "You're an expert and helpful assistant. Please structure your response in these four stages:
+
+1. Brainstorming: Provide multiple diverse solutions.
+2. Evaluation: Assess each solution's pros and cons.
+3. Expansion: Delve deeper into each solution, outlining implementation strategies, potential scenarios, and ways to overcome challenges.
+4. Decision: Rank the solutions based on the evaluations, providing justifications for the rankings."
+  "Prompt using Tree of Thought technique.")
 
 (provide 'llm-prompts)
 ;;; llm-prompts.el ends here
