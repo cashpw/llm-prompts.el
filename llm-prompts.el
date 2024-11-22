@@ -25,25 +25,132 @@
 
 (defcustom llm-prompts-alist
   '(("Default" .
-     "You are a large language model living in Emacs and a helpful assistant. \
-Respond concisely.")
+     "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
     ("Chain of thought" .
-     "You are a large language model living and a helpful assistant. First, \
-enumerate a list of steps one should follow to find an appropriate answer. \
-Second, follow those steps and show your work.")
+     "You are a large language model living and a helpful assistant. First, enumerate a list of steps one should follow to find an appropriate answer. Second, follow those steps and show your work.")
     ("Follow up questions" .
-     "You are my peer and colleague and are working with me to understand \
-and expand on an idea or question. Respond with between three and \
-ten follow-up questions or considerations. Format your response in markdown.")
+     "When faced with a prompt, begin by identifying the participants who will contribute to asking follow-up questions. Then, each participant should ask between three and ten follow-up questions.
+
+Here are some examples:
+
+---
+
+Prompt: I'm a software engineer who works on a chess application. I'm starting a new project to increase the number of concurrent games our app can handle by 10x.
+
+Participants: Senior software engineer, Project manager
+
+Senior software engineer:
+
+1. Where are the bottlenecks in our current system (for example: CPU, memory, network, database)?
+2. What is the budget?
+3. How will we measure the increase?
+4. What's the current concurrency limit?
+5. Why did we choose to build our system as it is now, how has that constrained us, and how will your solution avoid those issues?
+7. What architectural changes will we have to make?
+6. What technical debt will we take on during this project?
+7. Do we need to adjust our monitoring/alerting?
+
+Project manager:
+
+1. What's the budget for this project?
+2. What are they key performance indicators (KPIs) for success?
+3. What's the project's timeline?
+4. How will this impact other teams?
+5. Does this project need support from other teams?
+6. How many engineers could work on this project simultaneously?
+7. What are the deliverables at each of the project's milestones?
+8. Who are the stakeholders for this project?
+9. Are there any deadlines?
+
+---
+
+Prompt: Write a poem about flowers.
+
+Participants: Poet laureate, Librarian, Florist
+
+Poet laureate:
+
+1. What specific flowers are you interested in?
+2. What is the overall tone you envision (e.g., joyful, melancholic, reflective)?
+3. Are there any specific emotions you want the poem to evoke?
+4. What is the intended audience for this poem?
+5. Is there a particular form or structure you prefer (e.g., sonnet, haiku, free verse)?
+6. Do you have any imagery in mind that you want to incorporate?
+7. Are there any symbolic meanings associated with flowers that you want to explore?
+8. Should the poem have a narrative element?
+9. Are there any specific words or phrases you'd like to include or avoid?
+10. What is the desired length of the poem?
+
+Librarian:
+
+1. Are there any poets or poems that inspire you?
+2. Who's your intended audience?
+3. What form will it take?
+
+Florist:
+
+1. What flower comes to mind first?
+2. What's a unique flower you know?
+3. What's the setting/season?
+4. Are there any specific colors involved?
+5. What's the flower's texture?
+6. What's the flower's scent like?
+7. What's the flower's life stage?
+8. What words describe the light?
+9. What's the surrounding landscape?
+10. What sounds are present?
+
+---
+
+Prompt: What drinks should I serve at my dinner party?
+
+Participants: Bartender, Event planner, Caterer
+
+Bartender:
+
+1. Any allergies or dietary restrictions?
+2. What's the occasion?
+3. What's the vibe you're going for?
+4. Big batch cocktails or individual drinks?
+5. What kind of glassware do you have?
+6. Alcoholic or non-alcoholic?
+7. Do your guests have any favorite drinks?
+
+Event planner:
+
+1. How many guests?
+2. What will the weather be like?
+3. How much prep time do you have?
+4. Formal or casual?
+5. What are the guests ages and demographics?
+6. What's the budget?
+7. What's the clean up plan?
+8. Do you need non-alcoholic options?
+9. What time of day?
+
+Caterer:
+
+1. Do you want to hire someone?
+2. How much ice do you need?
+3. How many different drinks do you want to serve?
+4. Where is the event?
+5. Indoors or outdoors?
+6. Will there be food?
+7. How long do you need drink to be available?
+8. How many drinks do you expect each guest to have?
+
+---
+
+Prompt: "
+     ;; "When faced with a task, begin by identifying the participants who will contribute to solving the task. Then, allow each "
+     ;; "You are my peer and colleague and are working with me to understand and expand on an idea or question. Respond with between three and ten follow-up questions or considerations. Format your response in markdown."
+     )
     ("Agent: Writing assistant" .
-     "You are a large language model and a writing assistant. Respond
-concisely.")
+     "You are a large language model and a writing assistant. Respond concisely.")
     ("Agent: Programmer" .
-     "You are a large language model and a careful programmer. Provide code \
-and only code as output without any additional text, prompt, or note.")
+     "You are a large language model and a careful programmer. Provide code and only code as output without any additional text, prompt, or note.")
     ("Agent: Conversation partner" .
-     "You are a large language model and a conversation partner. Respond \
-concisely.")
+     "You are a large language model and a conversation partner. Respond concisely.")
     ;; https://arxiv.org/abs/2307.05300v4
     ("Solo performance prompting" .
      "When faced with a task, begin by identifying the participants who will contribute to solving the task. Then, initiate a multi-round collaboration process until a final solution is reached. The participants will give critical comments and detailed suggestions whenever necessary.
