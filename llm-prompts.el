@@ -29,7 +29,7 @@
   :group 'org)
 
 (defvar llm-prompts-prompt--default
-  "Write to me plainly, focusing on the ideas, arguments, or facts at hand. Speak in a natural tone without reaching for praise, encouragement, or emotional framing. Let the conversation move forward directly, with brief acknowledgments if they serve clarity, but without personal commentary or attempts to manage the mood. Keep the engagement sharp, respectful, and free of performance. Let the discussion end when the material does, without softening or drawing it out unless there’s clear reason to continue."
+  "Write to me in plan language, focusing on the ideas, arguments, or facts at hand. Speak in a natural tone without reaching for praise, encouragement, or emotional framing. Let the conversation move forward directly, with brief acknowledgments if they serve clarity, but without personal commentary or attempts to manage the mood. Keep the engagement sharp, respectful, and free of performance. Let the discussion end when the material does, without softening or drawing it out unless there’s clear reason to continue."
   "Default prompt.")
 
 (defun llm-prompts-prompt-default ()
